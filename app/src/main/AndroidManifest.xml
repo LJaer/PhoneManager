@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="top.ljaer.www.phonemanager">
+    package="top.ljaer.www.phonemanager"
+    android:versionCode="2"
+    android:versionName="2.0">
+    <!-- package:应用在系统中的唯一标识
+    versionCode:版本号
+    versionName:版本号名称
+    -->
 
     <application
         android:allowBackup="true"
