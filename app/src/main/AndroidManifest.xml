@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="top.ljaer.www.phonemanager"
-    android:versionCode="2"
-    android:versionName="2.0">
+    android:versionCode="1"
+    android:versionName="1.0">
     <!-- package:应用在系统中的唯一标识
     versionCode:版本号
     versionName:版本号名称
     -->
+
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -21,6 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".HomeActivity"></activity>
     </application>
 
 </manifest>
