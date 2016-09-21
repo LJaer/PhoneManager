@@ -32,4 +32,20 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="64dp" />
 
+    <!-- 显示下载进度 -->
+    <!-- visibility:设置控件是否可见
+            invisible:不可见,但是还是占用位置
+            visible:可见
+            gone:不可见,也不占用位置
+     -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/tv_splash_plan"
+        android:layout_below="@+id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:visibility="invisible"/>
+
 </RelativeLayout>
