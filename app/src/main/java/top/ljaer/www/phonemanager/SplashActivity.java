@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -196,14 +197,30 @@ public class SplashActivity extends Activity {
         finish();
     }
 
+    private SharedPreferences sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        sp = getSharedPreferences("config",MODE_PRIVATE);
         tv_splash_vesionname = (TextView) findViewById(R.id.tv_splash_versionname);
         tv_splash_vesionname.setText("版本号:" + getVersionName());
         tv_splash_plan = (TextView) findViewById(R.id.tv_splash_plan);
-        update();
+        if(sp.getBoolean("update",true)){
+            update();
+        }else{
+            //跳转到主界面
+            //不能让主线程去睡两秒钟
+            //主线程是有一个渲染界面的操作,主线程睡两秒钟,没有办法渲染界面
+            new Thread(){
+                public void run(){
+                    SystemClock.sleep(2000);
+                    enterHome();
+                }
+            }.start();
+            //SystemClock.sleep(2000);
+            //enterHome();
+        }
     }
 
     /**
