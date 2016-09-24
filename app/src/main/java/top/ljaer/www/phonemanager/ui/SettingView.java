@@ -7,6 +7,8 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.sql.SQLOutput;
+
 import top.ljaer.www.phonemanager.R;
 
 /**
@@ -16,6 +18,9 @@ public class SettingView extends RelativeLayout {
     TextView tv_setting_title;
     TextView tv_setting_des;
     CheckBox cb_setting_update;
+    String title;
+    String des_on;
+    String des_off;
     //在代码中使用的时候调用
     public SettingView(Context context) {
         super(context);
@@ -24,9 +29,31 @@ public class SettingView extends RelativeLayout {
     }
 
     //在布局文件中使用的时候调用
+    //AttributeSet:保存有控件的所有属性
     public SettingView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+        //通过AttributeSet获取控件的属性
+        /*int count = attrs.getAttributeCount();//获取控件属性的个数
+        System.out.println("属性的个数:"+count);
+        //获取控件所有属性的值
+        for (int i = 0; i<count;i++){
+            //获取某个属性的值
+            System.out.println( attrs.getAttributeValue(i));
+        }*/
+        //通过命名空间和属性的名称获取属性的值
+        //namespace:命名空间
+        //name:属性名称
+        title = attrs.getAttributeValue("http://schemas.android.com/apk/res-auto","title");
+        des_on = attrs.getAttributeValue("http://schemas.android.com/apk/res-auto","des_on");
+        des_off = attrs.getAttributeValue("http://schemas.android.com/apk/res-auto","des_off");
+        //给自定义组合控件的控件设置相应的值
+        tv_setting_title.setText(title);
+        if(isChecked()){
+            tv_setting_des.setText(des_on);
+        }else{
+            tv_setting_des.setText(des_off);
+        }
     }
 
     //在布局文件中使用的时候调用,比两个参数多了个样式
@@ -76,6 +103,12 @@ public class SettingView extends RelativeLayout {
     public void setChecked(boolean isChecked) {
         //设置checkbox的状态
         cb_setting_update.setChecked(isChecked);
+        //其实就是把sv_setting_update.setDes("打开提示更新");封装到了setChecked方法中
+        if(isChecked()){
+            tv_setting_des.setText(des_on);
+        }else{
+            tv_setting_des.setText(des_off);
+        }
     }
 
     /**

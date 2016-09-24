@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:itheima="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <!--layout_gravity:设置控件在父控件中的位置
@@ -21,10 +22,17 @@
         android:textColor="#000000"
         android:text="设置中心"/>
 
+    <!-- match_parent:-1
+        wrap_content:-2
+     -->
     <top.ljaer.www.phonemanager.ui.SettingView
         android:id="@+id/sv_setting_update"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        itheima:title="提示更新"
+        itheima:des_on="打开提示更新"
+        itheima:des_off="关闭提示更新"
+        >
     </top.ljaer.www.phonemanager.ui.SettingView>
 
 </LinearLayout>

@@ -23,13 +23,13 @@ public class SettingActivity extends Activity {
         sp = getSharedPreferences("config", MODE_PRIVATE);
         sv_setting_update = (SettingView) findViewById(R.id.sv_setting_update);
         //初始化自定义控件中各个控件的值
-        sv_setting_update.setTitle("提示更新");
+        //sv_setting_update.setTitle("提示更新");
         //defValue:缺省的值
         if(sp.getBoolean("update",true)){
-            sv_setting_update.setDes("打开提示更新");
+            //sv_setting_update.setDes("打开提示更新");
             sv_setting_update.setChecked(true);
         }else{
-            sv_setting_update.setDes("关闭提示更新");
+            //sv_setting_update.setDes("关闭提示更新");
             sv_setting_update.setChecked(false);
         }
 
@@ -47,7 +47,7 @@ public class SettingActivity extends Activity {
                 if (sv_setting_update.isChecked()) {
                     //关闭提示更新
                     sv_setting_update.setChecked(false);
-                    sv_setting_update.setDes("关闭提示更新");
+                    //sv_setting_update.setDes("关闭提示更新");
                     //保存状态
 
                     edit.putBoolean("update", false);
@@ -55,7 +55,7 @@ public class SettingActivity extends Activity {
                 } else {
                     //打开提示更新
                     sv_setting_update.setChecked(true);
-                    sv_setting_update.setDes("打开提示更新");
+                    //sv_setting_update.setDes("打开提示更新");
                     //保存状态
                     edit.putBoolean("update", true);
                 }
