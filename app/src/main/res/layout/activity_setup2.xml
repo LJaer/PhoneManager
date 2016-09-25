@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:itheima="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--layout_gravity:设置控件在父控件中的位置
+        gravity:设置控件内的内容的位置
+        layout_marginTop:举例某控件的距离
+        paddingTop:距离控件内边框的距离,距离TextView控件内顶边框的距离
+    -->
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#8866ff00"
+        android:gravity="center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="2、手机卡绑定"
+        android:textColor="#000000"
+        android:textSize="22sp" />
+
+    <!--距离上下左右的距离:layout_margin -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="通过绑定SIM卡"
+        android:textSize="18sp" />
+
+    <!--drawableLeft:在文本左边设置一张图片
+     @android:drawable/star_big_on:调用系统的图片,使用系统图片,可以节省应用的体积
+     -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:gravity="center_vertical"
+        android:text="下次重启手机如果发现SIM卡变化\n就会发送报警短信"
+        android:textSize="18sp" />
+
+    <top.ljaer.www.phonemanager.ui.SettingView
+        android:id="@+id/sv_setting_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        itheima:des_off="SIM卡没有绑定"
+        itheima:des_on="SIM卡已经绑定"
+        itheima:title="点击绑定SIM卡"></top.ljaer.www.phonemanager.ui.SettingView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_invisible" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_online" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_invisible" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_invisible" />
+
+    </LinearLayout>
+
+    <!-- layout_centerInParent:在父控件中间位置  -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/bind" />
+        <!-- layout_alignParentRight:在父控件的右方
+        layout_alignParentBottom:在父控件的下方
+        padding:距离控件上下左右内边框的距离
+        -->
+        <Button style="@style/next" />
+        <Button style="@style/pre" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -26,6 +26,12 @@
         </activity>
         <activity android:name=".HomeActivity"></activity>
         <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".LostFindActivity"/>
+        <activity android:name=".SetUp1Activity"/>
+        <activity android:name=".SetUp2Activity"/>
+        <activity android:name=".SetUp3Activity"/>
+        <activity android:name=".SetUp4Activity"/>
+        <activity android:name=".SetUpBaseActivity"/>
     </application>
 
 </manifest>

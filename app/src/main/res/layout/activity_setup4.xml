@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--layout_gravity:设置控件在父控件中的位置
+        gravity:设置控件内的内容的位置
+        layout_marginTop:举例某控件的距离
+        paddingTop:距离控件内边框的距离,距离TextView控件内顶边框的距离
+    -->
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#8866ff00"
+        android:gravity="center_horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="4、恭喜您,设置完成"
+        android:textColor="#000000"
+        android:textSize="22sp" />
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="你没有开启防盗保护" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_invisible" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_invisible" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_invisible" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/presence_online" />
+    </LinearLayout>
+
+    <!-- layout_centerInParent:在父控件中间位置  -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/phone" />
+        <!-- layout_alignParentRight:在父控件的右方
+        layout_alignParentBottom:在父控件的下方
+        padding:距离控件上下左右内边框的距离
+        要想将样式文件中的属性的值覆盖,在控件中使用相同的属性值,并设置值就可以
+        -->
+        <Button
+            style="@style/next"
+            android:text="设置完成"
+            android:drawableRight="@null"
+            />
+
+        <Button style="@style/pre" />
+    </RelativeLayout>
+
+</LinearLayout>
