@@ -74,10 +74,14 @@
             android:background="#000000" />
     </RelativeLayout>
 
+    <!-- TextView 天生没有点击事件 -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:background="@drawable/shape_drawable_button"
+        android:clickable="true"
+        android:onClick="resetup"
         android:text="重新进入设置向导"
         android:textSize="10sp" />
 
@@ -132,10 +136,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
         android:drawableLeft="@android:drawable/btn_star_big_on"
         android:gravity="center_vertical"
         android:text="远程锁屏:#*lockscreen*#"
-        android:layout_marginTop="5dp"
         android:textSize="18sp" />
 
 </LinearLayout>

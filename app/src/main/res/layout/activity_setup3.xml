@@ -32,15 +32,16 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="请输入安全密码"
-        android:textColor="#000000" />
+        android:hint="报警短信会发送给安全号码"
+        android:textColor="#000000"
+        android:id="@+id/et_setup3_safenum" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="选择联系人"
+        android:padding="10dp"
         android:background="@drawable/select_contact_button"
-        android:layout_gravity="center_vertical"
         />
 
     <!--drawableLeft:在文本左边设置一张图片

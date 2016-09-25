@@ -1,6 +1,7 @@
 package top.ljaer.www.phonemanager;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -13,10 +14,12 @@ import android.widget.Toast;
  * Created by LJaer on 16/9/25.
  */
 public abstract class SetUpBaseActivity extends Activity {
+    protected SharedPreferences sp;
     private GestureDetector gestureDetector;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sp = getSharedPreferences("config",MODE_PRIVATE);
         //1、获取手势识别器
         //要想让手势识别器生效,必须将手势识别器注册到屏幕的触摸事件中
         gestureDetector = new GestureDetector(this, new MyOnGestureListener());

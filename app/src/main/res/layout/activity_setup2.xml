@@ -42,7 +42,7 @@
         android:textSize="18sp" />
 
     <top.ljaer.www.phonemanager.ui.SettingView
-        android:id="@+id/sv_setting_update"
+        android:id="@+id/sv_setup2_sim"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         itheima:des_off="SIM卡没有绑定"
