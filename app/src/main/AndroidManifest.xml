@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -34,6 +35,7 @@
         <activity android:name=".SetUp2Activity"/>
         <activity android:name=".SetUp3Activity"/>
         <activity android:name=".SetUp4Activity"/>
+        <activity android:name=".ContactActivity"/>
         <receiver android:name=".receiver.BootCompleteReceiver">
             <!-- priority:广播接收者的优先级,值越大优先级越高,越先接收到广播 -->
             <intent-filter android:priority="1000">

@@ -54,4 +54,26 @@ public class SetUp3Activity extends SetUpBaseActivity {
         finish();
         overridePendingTransition(R.anim.setup_enter_pre, R.anim.setup_exit_pre);
     }
+
+    /**
+     * 选择联系人按钮
+     * @param v
+     */
+    public void selectContacts(View v){
+        //跳转到选择联系人界面
+        Intent intent = new Intent(this,ContactActivity.class);
+        //当现在的activity退出的时候,会调用之前activity的onActivityResult方法
+        startActivityForResult(intent,0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data!=null){
+            //接收选择联系人界面传递过来的界面,null.方法 参数为null
+            String num = data.getStringExtra("num");
+            //将获取到的号码,设置给安全号码输入框
+            et_setup3_safenum.setText(num);
+        }
+    }
 }

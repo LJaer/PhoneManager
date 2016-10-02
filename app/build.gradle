@@ -7,6 +7,7 @@ android {
         applicationId "top.ljaer.www.phonemanager"
         minSdkVersion 15
         targetSdkVersion 14
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -24,3 +25,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile files('libs/xUtils-2.6.14.jar')
 }
+
+
