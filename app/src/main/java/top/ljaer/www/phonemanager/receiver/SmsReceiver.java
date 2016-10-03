@@ -3,8 +3,11 @@ package top.ljaer.www.phonemanager.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.telephony.SmsMessage;
 
+import top.ljaer.www.phonemanager.R;
 import top.ljaer.www.phonemanager.service.GPSService;
 
 /**
@@ -12,6 +15,8 @@ import top.ljaer.www.phonemanager.service.GPSService;
  */
 
 public class SmsReceiver extends BroadcastReceiver {
+    private static MediaPlayer mediaPlayer;
+    //广播接收者在每个接收到一个广播事件,重新new广播接收者
     @Override
     public void onReceive(Context context, Intent intent) {
         //接收解析短信
@@ -36,6 +41,26 @@ public class SmsReceiver extends BroadcastReceiver {
                 abortBroadcast();//拦截操作,原生android系统中,国产深度定制系统中屏蔽,比如小米
             }else if ("#*alarm*#".equals(body)){
                 //播放报警音乐
+                //在播放报警音乐之前,将系统音量设置为最大
+                //声音的管理者
+                AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+                //设置系统音量的大小
+                //streamType:声音的类型
+                //index:声音的大小 0最小,15最大
+                //flags:指定信息的标签
+                //getStreamMaxVolume:获取系统最大音量,streamtype:声音的类型
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),0);
+
+                //判断是否在播放音乐
+                if (mediaPlayer!=null){
+                    mediaPlayer.release();//释放资源
+                }
+
+                mediaPlayer = MediaPlayer.create(context, R.raw.alarm);
+                //mediaPlayer.setVolume(1.0f,1.0f);//设置最大音量
+                //mediaPlayer.setLooping(true);
+                mediaPlayer.start();
+
                 System.out.println("播放报警音乐");
                 abortBroadcast();//拦截操作,原生android系统中,国产深度定制系统中屏蔽,比如小米
             }else if ("#*wipedata*#".equals(body)){
