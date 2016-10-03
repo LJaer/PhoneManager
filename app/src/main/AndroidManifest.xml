@@ -8,12 +8,16 @@
     versionName:版本号名称
     -->
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.LOCATION_HARDWARE" />
 
     <application
         android:allowBackup="true"
@@ -30,18 +34,26 @@
         </activity>
         <activity android:name=".HomeActivity"></activity>
         <activity android:name=".SettingActivity"></activity>
-        <activity android:name=".LostFindActivity"/>
-        <activity android:name=".SetUp1Activity"/>
-        <activity android:name=".SetUp2Activity"/>
-        <activity android:name=".SetUp3Activity"/>
-        <activity android:name=".SetUp4Activity"/>
-        <activity android:name=".ContactActivity"/>
+        <activity android:name=".LostFindActivity" />
+        <activity android:name=".SetUp1Activity" />
+        <activity android:name=".SetUp2Activity" />
+        <activity android:name=".SetUp3Activity" />
+        <activity android:name=".SetUp4Activity" />
+        <activity android:name=".ContactActivity" />
+
         <receiver android:name=".receiver.BootCompleteReceiver">
             <!-- priority:广播接收者的优先级,值越大优先级越高,越先接收到广播 -->
             <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <!-- 要想实现拦截操作,优先级必须大于0,小于0是系统先接收短信,大于0是我们先接收短信 -->
+        <receiver android:name=".receiver.SmsReceiver">
+            <intent-filter android:priority="1000">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".service.GPSService" />
     </application>
 
 </manifest>

@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * Created by LJaer on 16/9/24.
  */
 public class LostFindActivity extends Activity{
     private SharedPreferences sp;
+    private TextView tv_lostfind_safenum;
+    private ImageView iv_lostfind_protected;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +30,22 @@ public class LostFindActivity extends Activity{
         }else{
             //手机防盗显示界面
             setContentView(R.layout.activity_lostfind);
+            tv_lostfind_safenum = (TextView) findViewById(R.id.tv_lostfind_safenum);
+            iv_lostfind_protected = (ImageView) findViewById(R.id.iv_lostfind_protected);
+            //根据保存的安全号码和防盗保护状态进行设置
+            //设置安全号码
+            tv_lostfind_safenum.setText(sp.getString("safenum",""));
+            //设置防盗保护是否开启状态
+            //获取保存的防盗保护状态
+            boolean b = sp.getBoolean("protected",false);
+            //根据获取防盗保护状态设置相应显示图片
+            if(b){
+                //开启防盗保护
+                iv_lostfind_protected.setImageResource(R.drawable.lock);
+            }else{
+                //关闭防盗保护
+                iv_lostfind_protected.setImageResource(R.drawable.unlock);
+            }
         }
     }
 

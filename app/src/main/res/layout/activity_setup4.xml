@@ -22,6 +22,7 @@
         android:textSize="22sp" />
 
     <CheckBox
+        android:id="@+id/cb_setup4_protected"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="你没有开启防盗保护" />
