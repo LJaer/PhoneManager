@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">PhoneManager</string>
+
+    <string name="mple_device_admin_description">手机卫士,远程锁屏</string>
+    <string name="mple_device_admin">手机卫士</string>
 </resources>

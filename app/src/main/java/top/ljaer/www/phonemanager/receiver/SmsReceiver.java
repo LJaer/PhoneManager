@@ -1,6 +1,8 @@
 package top.ljaer.www.phonemanager.receiver;
 
+import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -19,6 +21,10 @@ public class SmsReceiver extends BroadcastReceiver {
     //广播接收者在每个接收到一个广播事件,重新new广播接收者
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        DevicePolicyManager devicePolicyManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        ComponentName componentName = new ComponentName(context,Admin.class);
+
         //接收解析短信
         //70汉字一条短信,71条汉字两条短信
         Object[] objs = (Object[]) intent.getExtras().get("pdus");
@@ -64,12 +70,19 @@ public class SmsReceiver extends BroadcastReceiver {
                 System.out.println("播放报警音乐");
                 abortBroadcast();//拦截操作,原生android系统中,国产深度定制系统中屏蔽,比如小米
             }else if ("#*wipedata*#".equals(body)){
-                //远程删除数据
+                //远程删除数据,类似于恢复出厂设置
                 System.out.println("远程删除数据");
+                if(devicePolicyManager.isAdminActive(componentName)){
+                    devicePolicyManager.wipeData(0);//远程删除数据
+                }
                 abortBroadcast();//拦截操作,原生android系统中,国产深度定制系统中屏蔽,比如小米
             }else if ("#*lockscreen*#".equals(body)){
                 //远程锁屏
                 System.out.println("远程锁屏");
+                //判断超级管理员是否激活
+                if(devicePolicyManager.isAdminActive(componentName)){
+                    devicePolicyManager.lockNow();
+                }
                 abortBroadcast();//拦截操作,原生android系统中,国产深度定制系统中屏蔽,比如小米
             }
         }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,12 +22,14 @@ import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.util.IOUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -198,22 +201,23 @@ public class SplashActivity extends Activity {
     }
 
     private SharedPreferences sp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        sp = getSharedPreferences("config",MODE_PRIVATE);
+        sp = getSharedPreferences("config", MODE_PRIVATE);
         tv_splash_vesionname = (TextView) findViewById(R.id.tv_splash_versionname);
         tv_splash_vesionname.setText("版本号:" + getVersionName());
         tv_splash_plan = (TextView) findViewById(R.id.tv_splash_plan);
-        if(sp.getBoolean("update",true)){
+        if (sp.getBoolean("update", true)) {
             update();
-        }else{
+        } else {
             //跳转到主界面
             //不能让主线程去睡两秒钟
             //主线程是有一个渲染界面的操作,主线程睡两秒钟,没有办法渲染界面
-            new Thread(){
-                public void run(){
+            new Thread() {
+                public void run() {
                     SystemClock.sleep(2000);
                     enterHome();
                 }
@@ -221,6 +225,45 @@ public class SplashActivity extends Activity {
             //SystemClock.sleep(2000);
             //enterHome();
         }
+        copyDb();
+    }
+
+    /**
+     * 拷贝数据库
+     */
+    private void copyDb() {
+        File file = new File(getFilesDir(), "address.db");
+        //判断文件是否存在
+        if (!file.exists()) {
+            //从assets目录中将数据库读取出来
+            //1、获取assets的管理者
+            AssetManager am = getAssets();
+            InputStream in = null;
+            FileOutputStream out = null;
+            try {
+                //2、读取数据库
+                in = am.open("address.db");
+                //写入流
+                //getCacheDir:获取缓存的路径
+                //getFilesDir:获取文件的路径
+                out = new FileOutputStream(file);
+                //3、读写操作
+                //设置缓冲区
+                byte[] b = new byte[1024];
+                int len = -1;
+                while ((len = in.read(b)) != -1) {
+                    out.write(b, 0, len);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+            /*in.close();
+            out.close();*/
+                IOUtils.closeQuietly(in);
+                IOUtils.closeQuietly(out);
+            }
+        }
+
     }
 
     /**

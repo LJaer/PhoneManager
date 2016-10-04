@@ -40,6 +40,8 @@
         <activity android:name=".SetUp3Activity" />
         <activity android:name=".SetUp4Activity" />
         <activity android:name=".ContactActivity" />
+        <activity android:name=".AToolsActivity"/>
+        <activity android:name=".AddressActivity"/>
 
         <receiver android:name=".receiver.BootCompleteReceiver">
             <!-- priority:广播接收者的优先级,值越大优先级越高,越先接收到广播 -->
@@ -53,6 +55,21 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".receiver.Admin"
+            android:description="@string/mple_device_admin_description"
+            android:label="@string/mple_device_admin"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_sample" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
         <service android:name=".service.GPSService" />
     </application>
 
