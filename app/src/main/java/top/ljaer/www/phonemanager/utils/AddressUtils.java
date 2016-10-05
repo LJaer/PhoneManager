@@ -32,10 +32,7 @@ public class AddressUtils {
             //将获取到的正在运行的服务的全类名和传递过来的服务的全类名比较,一致表示服务正在运行,返回true,不一致表示服务没有运行,返回false
             if(className.equals(className2)){
                 return true;
-            }else{
-                return false;
             }
-
         }
         return false;
     }
