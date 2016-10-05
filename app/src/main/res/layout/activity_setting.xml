@@ -45,5 +45,12 @@
         itheima:des_off="关闭显示号码归属地"
         >
     </top.ljaer.www.phonemanager.ui.SettingView>
+    
+    <top.ljaer.www.phonemanager.ui.SettingClickView
+        android:id="@+id/scv_setting_changebg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </top.ljaer.www.phonemanager.ui.SettingClickView>
 
 </LinearLayout>

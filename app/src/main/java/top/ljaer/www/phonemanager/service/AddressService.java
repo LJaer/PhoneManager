@@ -1,18 +1,25 @@
 package top.ljaer.www.phonemanager.service;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.location.Address;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 
+import top.ljaer.www.phonemanager.R;
 import top.ljaer.www.phonemanager.db.dao.AddressDao;
 
 /**
@@ -22,18 +29,53 @@ import top.ljaer.www.phonemanager.db.dao.AddressDao;
 public class AddressService extends Service {
     private TelephonyManager telephonyManager;
     private MyPhoneStateListener myPhoneStateListener;
-    private TextView textView;
+    //private TextView textView;
     private WindowManager windowManager;
+    private View view;
+    private MyOutGoingCallReceiver myOutGoingCallReceiver;
+    private SharedPreferences sp;
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
+    /**
+     * 外拨电话的广播接收者
+     */
+    private class MyOutGoingCallReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //查询外拨电话的号码归属地
+            //1、获取外拨电话
+            String phone = getResultData();
+            //2、查询号码归属地
+            String queryAddress = AddressDao.queryAddress(phone,getApplicationContext());
+            //3、判断号码归属地是否为空
+            if(!TextUtils.isEmpty(queryAddress)){
+                //显示toast
+                showToast(queryAddress);
+            }
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        sp = getSharedPreferences("config",MODE_PRIVATE);
+
+        //代码注册监听外拨电话的广播接收者
+        //需要的元素1、广播接收者,2、设置监听的广播事件
+        //1、设置广播接收者
+        myOutGoingCallReceiver = new MyOutGoingCallReceiver();
+        //2、设置监听的广播事件
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("android.intent.action.NEW_OUTGOING_CALL");//设置接收的广播事件
+        //3、注册广播接收者
+        registerReceiver(myOutGoingCallReceiver,intentFilter);
+
         //监听电话状态
         //1、获取电话的管理者
         telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -78,6 +120,8 @@ public class AddressService extends Service {
     public void onDestroy() {
         //当服务关闭的时候取消监听
         telephonyManager.listen(myPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+        //注销外拨电话广播接收者
+        unregisterReceiver(myOutGoingCallReceiver);
         super.onDestroy();
     }
 
@@ -85,13 +129,30 @@ public class AddressService extends Service {
      * 显示toast
      */
     public void showToast(String queryAddress) {
+        int[] bgcolor = new int[] {
+                R.drawable.call_locate_white,
+                R.drawable.call_locate_orange, R.drawable.call_locate_blue,
+                R.drawable.call_locate_gray, R.drawable.call_locate_green };
+
+
         //1、获取windowmanager
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
-        textView = new TextView(getApplicationContext());
-        textView.setText(queryAddress);
-        textView.setTextSize(20);
-        textView.setTextColor(Color.RED);
+        //将布局文件转化为view对象
+        view = View.inflate(getApplicationContext(), R.layout.toast_custom, null);
+        //初始化控件
+        //view.findViewById表示去toast_custom找控件
+        TextView tv_toastcustom_address = (TextView) view.findViewById(R.id.tv_toastcustom_address);
+        tv_toastcustom_address.setText(queryAddress);
+
+        //根据归属地提示框风格中设置的风格的索引值设置toast显示的背景风格
+        int cs = sp.getInt("which",0);
+        view.setBackgroundResource(bgcolor[sp.getInt("which",0)]);
+
+//        textView = new TextView(getApplicationContext());
+//        textView.setText(queryAddress);
+//        textView.setTextSize(20);
+//        textView.setTextColor(Color.RED);
 
         //3、设置toast的属性
         //LayoutParams是toast的属性,控件要添加到哪个父控件中,父控件就要使用哪个父控件的属性,表示控件的属性规则符合父控件的属性规则
@@ -107,17 +168,17 @@ public class AddressService extends Service {
         //2、将view对象添加到windowManager中
         //params:layoutparams   控件的属性
         //将params属性设置给view对象,并添加到windowManager中
-        windowManager.addView(textView, params);
+        windowManager.addView(view, params);
     }
 
     /**
      * 隐藏toast
      */
-    public  void hideToast(){
-        if(windowManager!=null && textView!=null){
-            windowManager.removeView(textView);//移除控件
+    public void hideToast() {
+        if (windowManager != null && view != null) {
+            windowManager.removeView(view);//移除控件
             windowManager = null;
-            textView = null;
+            view = null;
         }
     }
 }

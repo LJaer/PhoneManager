@@ -1,12 +1,15 @@
 package top.ljaer.www.phonemanager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
 import top.ljaer.www.phonemanager.service.AddressService;
+import top.ljaer.www.phonemanager.ui.SettingClickView;
 import top.ljaer.www.phonemanager.ui.SettingView;
 import top.ljaer.www.phonemanager.utils.AddressUtils;
 
@@ -17,6 +20,7 @@ public class SettingActivity extends Activity {
     private SettingView sv_setting_update;
     private SharedPreferences sp;
     private SettingView sv_setting_address;
+    private SettingClickView scv_setting_changebg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +31,57 @@ public class SettingActivity extends Activity {
         sp = getSharedPreferences("config", MODE_PRIVATE);
         sv_setting_update = (SettingView) findViewById(R.id.sv_setting_update);
         sv_setting_address = (SettingView) findViewById(R.id.sv_setting_address);
+        scv_setting_changebg = (SettingClickView) findViewById(R.id.scv_setting_changebg);
 
         update();
+        changedbg();
     }
+
+    /**
+     * 设置归属地提示框风格
+     */
+    private void changedbg() {
+        final String[] items={"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
+        //设置标题和描述信息
+        scv_setting_changebg.setTitle("归属地提示框风格");
+        //根据保存的选中的选项的索引值设置自定义组合控件描述信息的回显操作
+        scv_setting_changebg.setDes(items[sp.getInt("which",0)]);
+        //设置自定义组合控件的点击事件
+        scv_setting_changebg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //弹出单选对话框
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+                //设置图标
+                builder.setIcon(R.drawable.ic_launcher);
+                //设置标题
+                builder.setTitle("归属地提示框风格");
+                //设置单选框
+                //items:选项的文本的数组
+                //checkItem:选中的选项
+                //listener:点击事件
+                //设置单选框选中选项的回显
+                builder.setSingleChoiceItems(items, sp.getInt("which",0), new DialogInterface.OnClickListener() {
+                    //which:选中的选项的索引值
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences.Editor edit = sp.edit();
+                        edit.putInt("which",which);
+                        edit.commit();
+                        //1、设置自定义组合控件描述信息文本
+                        scv_setting_changebg.setDes(items[which]);//根据选中选项的索引值从items数组中获取出相应文本,设置给描述信息控件
+                        //2、隐藏对话框
+                        dialog.dismiss();
+                    }
+                });
+
+                //设置取消按钮
+                builder.setNegativeButton("取消",null);//当点击按钮只是需要进行隐藏对话框的操作的话,参数2可以写为null,表示隐藏对话框
+                builder.show();
+            }
+        });
+    }
+
 
     //没有焦点的时候调用
     @Override
