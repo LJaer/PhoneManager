@@ -35,4 +35,15 @@
         >
     </top.ljaer.www.phonemanager.ui.SettingView>
 
+
+    <top.ljaer.www.phonemanager.ui.SettingView
+        android:id="@+id/sv_setting_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        itheima:title="显示号码归属地"
+        itheima:des_on="打开显示号码归属地"
+        itheima:des_off="关闭显示号码归属地"
+        >
+    </top.ljaer.www.phonemanager.ui.SettingView>
+
 </LinearLayout>

@@ -36,6 +36,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import top.ljaer.www.phonemanager.service.AddressService;
 import top.ljaer.www.phonemanager.utils.StreamUtil;
 
 public class SplashActivity extends Activity {
@@ -226,6 +227,9 @@ public class SplashActivity extends Activity {
             //enterHome();
         }
         copyDb();
+        //开启监听电话状态的服务
+        /*Intent intent = new Intent(this, AddressService.class);
+        startService(intent);*/
     }
 
     /**

@@ -10,6 +10,7 @@
         layout_marginTop:举例某控件的距离
         paddingTop:距离控件内边框的距离,距离TextView控件内顶边框的距离
     -->
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="match_parent"
