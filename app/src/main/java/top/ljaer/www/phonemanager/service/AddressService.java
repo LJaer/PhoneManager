@@ -14,6 +14,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -164,6 +165,13 @@ public class AddressService extends Service {
         params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON//保持当前屏幕
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE //没有焦点
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;//不可触摸
+
+        //设置toast的位置
+        //效果冲突,以默认的效果为主
+        params.gravity = Gravity.LEFT|Gravity.TOP;
+
+        params.x = 120;//不是坐标,表示的距离边框的距离,根据gravity来设置的,如果gravity是left表示距离左边框的距离,如果是right表示距离右边框的距离
+        params.y = 100;//跟x的含义一样
 
         //2、将view对象添加到windowManager中
         //params:layoutparams   控件的属性
