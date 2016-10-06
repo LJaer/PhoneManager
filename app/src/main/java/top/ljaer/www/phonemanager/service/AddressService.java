@@ -170,8 +170,8 @@ public class AddressService extends Service {
         //效果冲突,以默认的效果为主
         params.gravity = Gravity.LEFT|Gravity.TOP;
 
-        params.x = 120;//不是坐标,表示的距离边框的距离,根据gravity来设置的,如果gravity是left表示距离左边框的距离,如果是right表示距离右边框的距离
-        params.y = 100;//跟x的含义一样
+        params.x = sp.getInt("x",100);//不是坐标,表示的距离边框的距离,根据gravity来设置的,如果gravity是left表示距离左边框的距离,如果是right表示距离右边框的距离
+        params.y = sp.getInt("y",100);//跟x的含义一样
 
         //2、将view对象添加到windowManager中
         //params:layoutparams   控件的属性
