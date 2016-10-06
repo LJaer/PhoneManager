@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
  * Created by LJaer on 16/10/5.
@@ -21,6 +22,8 @@ public class DragViewActivity extends Activity {
     private LinearLayout ll_dragviewe_toast;
     private int width;
     private int height;
+    private TextView tv_dragview_bottom;
+    private TextView tv_dragview_top;
 
 
     @Override
@@ -29,6 +32,9 @@ public class DragViewActivity extends Activity {
         setContentView(R.layout.activity_dragview);
         ll_dragviewe_toast = (LinearLayout) findViewById(R.id.ll_dragviewe_toast);
         sp = getSharedPreferences("config",MODE_PRIVATE);
+        tv_dragview_bottom = (TextView) findViewById(R.id.tv_dragview_bottom);
+        tv_dragview_top = (TextView) findViewById(R.id.tv_dragview_top);
+
         //获取屏幕的宽度
         WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         //windowManager.getDefaultDisplay().getWidth();
@@ -54,6 +60,16 @@ public class DragViewActivity extends Activity {
         params.topMargin = y;
         //给控件设置属性
         ll_dragviewe_toast.setLayoutParams(params);
+
+        if(y>=height/2){
+            //隐藏下方显示上方
+            tv_dragview_bottom.setVisibility(View.INVISIBLE);
+            tv_dragview_top.setVisibility(View.VISIBLE);
+        }else{
+            //隐藏上方显示下方
+            tv_dragview_bottom.setVisibility(View.VISIBLE);
+            tv_dragview_top.setVisibility(View.INVISIBLE);
+        }
 
         setTouch();
         setDoubleClick();
@@ -141,6 +157,18 @@ public class DragViewActivity extends Activity {
                         }
 
                         ll_dragviewe_toast.layout(l,t,r,b);//重新绘制控件
+                        //判断textview的隐藏显示
+                        int top = ll_dragviewe_toast.getTop();
+                        if(top>=height/2){
+                            //隐藏下方显示上方
+                            tv_dragview_bottom.setVisibility(View.INVISIBLE);
+                            tv_dragview_top.setVisibility(View.VISIBLE);
+                        }else{
+                            //隐藏上方显示下方
+                            tv_dragview_bottom.setVisibility(View.VISIBLE);
+                            tv_dragview_top.setVisibility(View.INVISIBLE);
+                        }
+
                         //5、更新开始时间
                         startX = newX;
                         startY = newY;
