@@ -21,7 +21,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
 
     <application
         android:allowBackup="true"
@@ -47,6 +48,7 @@
         <activity android:name=".AToolsActivity" />
         <activity android:name=".AddressActivity" />
         <activity android:name=".CallSmsSafeActivity"/>
+        <activity android:name=".SoftManagerActivity"/>
         <activity
             android:name=".DragViewActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
@@ -78,6 +80,7 @@
             </intent-filter>
         </receiver>
 
+        <service android:name=".service.BlackNumService"/>
         <service android:name=".service.GPSService" />
         <service android:name=".service.AddressService" /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->

@@ -59,4 +59,14 @@
         android:layout_height="wrap_content">
     </top.ljaer.www.phonemanager.ui.SettingClickView>
 
+    <top.ljaer.www.phonemanager.ui.SettingView
+        android:id="@+id/sv_setting_blacknum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        itheima:title="黑名单拦截"
+        itheima:des_on="打开黑名单拦截"
+        itheima:des_off="关闭黑名单拦截"
+        >
+    </top.ljaer.www.phonemanager.ui.SettingView>
+
 </LinearLayout>
