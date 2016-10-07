@@ -26,6 +26,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"></ListView>
 
+        <TextView
+            android:id="@+id/tv_softmanager_userorsystem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="用户程序(12)"
+            android:background="#888888"
+            android:textColor="#ffffff"
+            />
 
         <ProgressBar
             android:id="@+id/loading"
