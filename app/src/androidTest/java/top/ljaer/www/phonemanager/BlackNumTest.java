@@ -2,6 +2,10 @@ package top.ljaer.www.phonemanager;
 
 import android.test.AndroidTestCase;
 
+import java.util.List;
+import java.util.Random;
+
+import top.ljaer.www.phonemanager.bean.BlackNumInfo;
 import top.ljaer.www.phonemanager.db.BlackNumOpenHelper;
 import top.ljaer.www.phonemanager.db.dao.BlackNumDao;
 
@@ -33,7 +37,11 @@ public class BlackNumTest extends AndroidTestCase {
 
     public void testAddBlackNum(){
         //BlackNumDao blackNumDao = new BlackNumDao(getContext());
-        blackNumDao.addBlackNum("110",BlackNumDao.CALL);
+        Random random = new Random();
+        //random.nextInt(3);//0-2 [0-3)
+        for (int i = 0; i<200;i++){
+            blackNumDao.addBlackNum("12345678"+i,random.nextInt(3));
+        }
     }
 
     public void testUpdateBlackNum(){
@@ -51,6 +59,14 @@ public class BlackNumTest extends AndroidTestCase {
     public void testDeleteBlackNum(){
         //BlackNumDao blackNumDao = new BlackNumDao(getContext());
         blackNumDao.deleteBlackNum("110");
+    }
+
+    public void testQueryAllBlackNum(){
+        List<BlackNumInfo> list = blackNumDao.queryAllBlackNum();
+        for (BlackNumInfo blackNumInfo:
+             list) {
+            System.out.println(blackNumInfo.toString());
+        }
     }
 
 }

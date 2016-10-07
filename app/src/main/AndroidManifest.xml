@@ -46,6 +46,7 @@
         <activity android:name=".ContactActivity" />
         <activity android:name=".AToolsActivity" />
         <activity android:name=".AddressActivity" />
+        <activity android:name=".CallSmsSafeActivity"/>
         <activity
             android:name=".DragViewActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
@@ -78,7 +79,11 @@
         </receiver>
 
         <service android:name=".service.GPSService" />
-        <service android:name=".service.AddressService" />
+        <service android:name=".service.AddressService" /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

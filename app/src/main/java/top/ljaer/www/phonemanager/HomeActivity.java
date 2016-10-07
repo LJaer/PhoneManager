@@ -56,6 +56,10 @@ public class HomeActivity extends Activity {
                             showEnterPasswordDialog();
                         }
                         break;
+                    case 1://通讯卫士
+                        Intent intent1 = new Intent(HomeActivity.this,CallSmsSafeActivity.class);
+                        startActivity(intent1);
+                        break;
                     case 7://高级工具
                         Intent intent7 = new Intent(HomeActivity.this,AToolsActivity.class);
                         startActivity(intent7);

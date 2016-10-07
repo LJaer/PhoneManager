@@ -5,6 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import top.ljaer.www.phonemanager.bean.BlackNumInfo;
 import top.ljaer.www.phonemanager.db.BlackNumOpenHelper;
 
 /**
@@ -101,6 +105,57 @@ public class BlackNumDao {
         database.delete(BlackNumOpenHelper.DB_NAME,"blacknum=?",new String[]{blackNum});
         //3、关闭数据库
         database.close();
+    }
+
+    /**
+     * 查询全部黑名单号码
+     */
+    public List<BlackNumInfo> queryAllBlackNum(){
+        List<BlackNumInfo> list = new ArrayList<BlackNumInfo>();
+        //1、获取数据库
+        SQLiteDatabase database = blackNumOpenHelper.getReadableDatabase();
+        //2、查询操作
+        Cursor cursor = database.query(BlackNumOpenHelper.DB_NAME,new String[]{"blacknum","mode"},null,null,null,null,"_id desc");//desc:倒序查询,asc:正序查询,默认正序查询
+        //3、解析cursor
+        while (cursor.moveToNext()){
+            //获取查询出来的数据
+            String blacknum= cursor.getString(0);
+            int mode = cursor.getInt(1);
+            BlackNumInfo blackNumInfo = new BlackNumInfo(blacknum,mode);
+            list.add(blackNumInfo);
+        }
+        //4、关闭数据库
+        cursor.close();
+        database.close();
+        return list;
+    }
+
+    /**
+     * 查询部分数据的方法
+     * 查询20条数据
+     * MaxNum:查询的总个数
+     * startindex:查询的起始位置
+     * @return
+     */
+    public List<BlackNumInfo> getPartBlackNum(int MaxNum,int startindex){
+        List<BlackNumInfo> list = new ArrayList<BlackNumInfo>();
+        //1、获取数据库
+        SQLiteDatabase database = blackNumOpenHelper.getReadableDatabase();
+        //2、查询操作
+        //Cursor cursor = database.query(BlackNumOpenHelper.DB_NAME,new String[]{"blacknum","mode"},null,null,null,null,"_id desc");//desc:倒序查询,asc:正序查询,默认正序查询
+        Cursor cursor = database.rawQuery("select blacknum,mode from info order by _id desc limit ? offset ?",new String[]{MaxNum+"",startindex+""});
+        //3、解析cursor
+        while (cursor.moveToNext()){
+            //获取查询出来的数据
+            String blacknum= cursor.getString(0);
+            int mode = cursor.getInt(1);
+            BlackNumInfo blackNumInfo = new BlackNumInfo(blacknum,mode);
+            list.add(blackNumInfo);
+        }
+        //4、关闭数据库
+        cursor.close();
+        database.close();
+        return list;
     }
 
 }
