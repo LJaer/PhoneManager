@@ -32,8 +32,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".SplashActivity">
             <intent-filter>
+                <!-- MAIN:主界面,入口界面 -->
                 <action android:name="android.intent.action.MAIN" />
-
+                <!-- LAUNCHER:桌面上释放一个图标 -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

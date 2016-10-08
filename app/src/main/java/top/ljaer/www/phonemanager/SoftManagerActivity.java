@@ -1,18 +1,30 @@
 package top.ljaer.www.phonemanager;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -30,7 +42,7 @@ import top.ljaer.www.phonemanager.utils.MyAsynTaks;
  * Created by LJaer on 16/10/7.
  */
 
-public class SoftManagerActivity extends Activity {
+public class SoftManagerActivity extends Activity implements View.OnClickListener {
 
     private ListView lv_softmanager_applicaiton;
     private ProgressBar loading;
@@ -40,6 +52,14 @@ public class SoftManagerActivity extends Activity {
     //系统程序集合
     private List<AppInfo> systemappinfo;
     private TextView tv_softmanager_userorsystem;
+    private AppInfo appInfo;
+    private PopupWindow popupWindow;
+    private MyAdapter myadapter;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +72,102 @@ public class SoftManagerActivity extends Activity {
 
         //加载数据
         fillData();
-
         listviewOnScroll();
+        listviewItemClick();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    /**
+     * 条目点击事件
+     */
+    private void listviewItemClick() {
+        lv_softmanager_applicaiton.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            //view:条目的view对象
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //弹出气泡
+                //1、屏蔽用户程序和系统程序(...个)弹出气泡
+                if (position == 0 || position == userappinfo.size() + 1) {
+                    return;
+                }
+                //2、获取条目所对应的应用程序的信息
+                //数据就要从userappinfo和systemappinfo中获取
+                if (position <= userappinfo.size()) {
+                    //用户程序
+                    appInfo = userappinfo.get(position - 1);
+                } else {
+                    //系统程序
+                    appInfo = systemappinfo.get(position - userappinfo.size() - 2);
+                }
+                //5、弹出新的气泡之前,删除旧的气泡
+                hidePopuwindow();
+                //3、弹出气泡
+                /*TextView contentView = new TextView(getApplicationContext());
+                contentView.setText("我是popupWindow的TextView控件");
+                contentView.setBackgroundColor(Color.RED);*/
+                View contentView = View.inflate(getApplicationContext(), R.layout.popu_window, null);
+
+                //初始化控件
+                LinearLayout ll_popuwindow_uninstall = (LinearLayout) contentView.findViewById(R.id.ll_popuwindow_uninstall);
+                LinearLayout ll_popuwindow_start = (LinearLayout) contentView.findViewById(R.id.ll_popuwindow_start);
+                LinearLayout ll_popuwindow_share = (LinearLayout) contentView.findViewById(R.id.ll_popuwindow_share);
+                LinearLayout ll_popuwindow_detail = (LinearLayout) contentView.findViewById(R.id.ll_popuwindow_detail);
+                //给控件设置点击事件
+                ll_popuwindow_uninstall.setOnClickListener(SoftManagerActivity.this);
+                ll_popuwindow_start.setOnClickListener(SoftManagerActivity.this);
+                ll_popuwindow_share.setOnClickListener(SoftManagerActivity.this);
+                ll_popuwindow_detail.setOnClickListener(SoftManagerActivity.this);
+
+                //contentView:显示view对象
+                //width,height:view宽高
+                popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                //4、获取条目的位置,让气泡显示在相应的条目上
+                int[] location = new int[2];//保存x和y的数组
+                view.getLocationInWindow(location);//获取条目x和y的坐标,同时保存到int[]
+                //获取x和y的坐标
+                int x = location[0];
+                int y = location[1];
+                //parent:要挂载在哪个控件上
+                //gravity,x,y:控制popupWindow显示的位置
+                popupWindow.showAtLocation(parent, Gravity.LEFT | Gravity.TOP, x + 50, y);
+                //6、设置动画
+                //缩放动画
+                //前四个:控制控件由没有变到有    动画0:没有  1:整个控件
+                //后四个:控制控件是按照自身还是父控件进行变化
+                //RELATIVE_TO_PARENT:以自身变化
+                //RELATIVE_TO_PARENT:以父控件变化
+                ScaleAnimation scaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0.5f);
+                scaleAnimation.setDuration(500);
+
+                //渐变动画
+                AlphaAnimation alphaAnimation = new AlphaAnimation(0.4f, 1.0f);//由半透明变成不透明
+                alphaAnimation.setDuration(500);
+
+                //组合动画
+                //shareInterpolator:是否使用相同的动画插补器    true:共享     false:各自使用各自的
+                AnimationSet animationSet = new AnimationSet(true);
+                //添加动画
+                animationSet.addAnimation(scaleAnimation);
+                animationSet.addAnimation(alphaAnimation);
+
+                //执行动画
+                contentView.startAnimation(animationSet);
+
+            }
+        });
+    }
+
+    /**
+     * 隐藏气泡的方法
+     */
+    private void hidePopuwindow() {
+        if (popupWindow != null) {
+            popupWindow.dismiss();
+            popupWindow = null;
+        }
     }
 
     /**
@@ -66,6 +180,7 @@ public class SoftManagerActivity extends Activity {
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
             }
+
             //滑动的时候调用
             //view:listview
             //firstVisibleItem:界面第一个显示的条目
@@ -73,15 +188,16 @@ public class SoftManagerActivity extends Activity {
             //totalItemCount:条目的总个数
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                //隐藏气泡
+                hidePopuwindow();
                 //为null的原因:listview在初始化的时候就会调用onscroll方法,此时还没有加载数据
-                if (userappinfo!=null&&systemappinfo!=null){
-                    if(firstVisibleItem>= userappinfo.size()+1){
-                        tv_softmanager_userorsystem.setText("系统程序("+systemappinfo.size()+")");
-                    }else{
-                        tv_softmanager_userorsystem.setText("用户程序("+userappinfo.size()+")");
+                if (userappinfo != null && systemappinfo != null) {
+                    if (firstVisibleItem >= userappinfo.size() + 1) {
+                        tv_softmanager_userorsystem.setText("系统程序(" + systemappinfo.size() + ")");
+                    } else {
+                        tv_softmanager_userorsystem.setText("用户程序(" + userappinfo.size() + ")");
                     }
                 }
-
             }
         });
     }
@@ -115,18 +231,60 @@ public class SoftManagerActivity extends Activity {
 
             @Override
             public void postTask() {
-                lv_softmanager_applicaiton.setAdapter(new MyAdapter());
+                if (myadapter == null) {
+                    myadapter = new MyAdapter();
+                    lv_softmanager_applicaiton.setAdapter(myadapter);
+                } else {
+                    myadapter.notifyDataSetChanged();
+                }
                 loading.setVisibility(ListView.INVISIBLE);
             }
         }.execute();
     }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("SoftManager Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
+
 
     private class MyAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
             //list.size()=userappinfo.size()+systemappinfo.size()
-            return userappinfo.size() + systemappinfo.size()+2;//+2是两个条目
+            return userappinfo.size() + systemappinfo.size() + 2;//+2是两个条目
         }
 
         @Override
@@ -142,19 +300,19 @@ public class SoftManagerActivity extends Activity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            if(position==0){
+            if (position == 0) {
                 //添加用户程序(...个)textview
                 TextView textView = new TextView(getApplicationContext());
                 textView.setBackgroundColor(Color.GRAY);
                 textView.setTextColor(Color.WHITE);
-                textView.setText("用户程序("+userappinfo.size()+")");
+                textView.setText("用户程序(" + userappinfo.size() + ")");
                 return textView;
-            }else if(position==userappinfo.size()+1){
+            } else if (position == userappinfo.size() + 1) {
                 //添加系统程序(...个)textview
                 TextView textView = new TextView(getApplicationContext());
                 textView.setBackgroundColor(Color.GRAY);
                 textView.setTextColor(Color.WHITE);
-                textView.setText("系统程序("+systemappinfo.size()+")");
+                textView.setText("系统程序(" + systemappinfo.size() + ")");
                 return textView;
             }
 
@@ -175,14 +333,14 @@ public class SoftManagerActivity extends Activity {
                 view.setTag(viewHolder);
             }
             //1、获取应用程序的信息
-            AppInfo appInfo;
+            AppInfo appInfo = null;
             //数据就要从userappinfo和systemappinfo中获取
             if (position <= userappinfo.size()) {
                 //用户程序
-                appInfo = userappinfo.get(position-1);
+                appInfo = userappinfo.get(position - 1);
             } else {
                 //系统程序
-                appInfo = systemappinfo.get(position - userappinfo.size()-2);
+                appInfo = systemappinfo.get(position - userappinfo.size() - 2);
             }
 
             //2、设置显示数据
@@ -203,5 +361,126 @@ public class SoftManagerActivity extends Activity {
     static class ViewHolder {
         ImageView iv_itemsoftmanager_icon;
         TextView tv_itemsoftmanager_name, tv_itemsoftmanager_issd, tv_itemsoftmanager_version;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //隐藏气泡
+        hidePopuwindow();
+    }
+
+    @Override
+    public void onClick(View v) {
+        //判断点击是那个按钮
+        //getId():获取点击按钮id
+        switch (v.getId()) {
+            case R.id.ll_popuwindow_uninstall:
+                System.out.println("卸载");
+                uninstall();
+                break;
+            case R.id.ll_popuwindow_start:
+                System.out.println("启动");
+                start();
+                break;
+            case R.id.ll_popuwindow_share:
+                System.out.println("分享");
+                share();
+                break;
+            case R.id.ll_popuwindow_detail:
+                System.out.println("详情");
+                detail();
+                break;
+        }
+        hidePopuwindow();
+    }
+
+    /**
+     * 分享
+     */
+    private void share() {
+        /**
+         *  Intent
+         {
+         act=android.intent.action.SEND
+         typ=text/plain
+         flg=0x3000000
+         cmp=com.android.mms/.ui.ComposeMessageActivity (has extras)   intent中包含信息
+         } from pid 228
+         */
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.SEND");
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT,"发现一个很牛X软件"+appInfo.getName()+",下载地址:www.baidu.com,自己去搜");
+        startActivity(intent);
+    }
+
+    /**
+     *详情
+     */
+    private void detail() {
+        /**
+         *  Intent
+         {
+         act=android.settings.APPLICATION_DETAILS_SETTINGS    action
+         dat=package:com.example.android.apis   data
+         cmp=com.android.settings/.applications.InstalledAppDetails
+         } from pid 228
+         */
+        Intent intent = new Intent();
+        intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+        intent.setData(Uri.parse("package:"+appInfo.getPackageName()));
+        startActivity(intent);
+    }
+
+    /**
+     * 启动
+     */
+    private void start() {
+        PackageManager pm = getPackageManager();
+        //获取应用程序的启动意图
+        Intent intent = pm.getLaunchIntentForPackage(appInfo.getPackageName());
+        if (intent != null) {
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "系统核心程序,无法启动", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 卸载
+     */
+    private void uninstall() {
+        /**
+         * <intent-filter>
+         <action android:name="android.intent.action.VIEW" />
+         <action android:name="android.intent.action.DELETE" />
+         <category android:name="android.intent.category.DEFAULT" />
+         <data android:scheme="package" />
+         </intent-filter>
+         */
+        //判断是否是系统程序
+        if (appInfo.isUser()) {
+            //判断是否是我们自己的应用,是不能卸载
+            if (!appInfo.getPackageName().equals(getPackageName())) {
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.DELETE");
+                intent.addCategory("android.intent.category.DEFAULT");
+                intent.setData(Uri.parse("package:" + appInfo.getPackageName()));//tel:110
+                startActivityForResult(intent, 0);
+            } else {
+                Toast.makeText(getApplicationContext(), "文明社会,杜绝自杀!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "要卸载系统程序,请root先", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        fillData();
     }
 }
