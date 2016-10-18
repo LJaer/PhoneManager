@@ -10,11 +10,41 @@
         android:layout_height="wrap_content"
         android:background="#8866ff00"
         android:gravity="center_horizontal"
-        android:textSize="22sp"
-        android:paddingTop="5dp"
         android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="软件管理"
         android:textColor="#000000"
-        android:text="软件管理"/>
+        android:textSize="22sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_softmanager_rom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="内存可用:144M"
+            android:textSize="16sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_softmanager_sd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="SD卡可用:244M"
+            android:textSize="16sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            />
+    </LinearLayout>
 
     <!-- FrameLayout:在布局文件中控件越往下,显示的时候越在上方 -->
     <FrameLayout
@@ -30,18 +60,16 @@
             android:id="@+id/tv_softmanager_userorsystem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="用户程序(12)"
             android:background="#888888"
-            android:textColor="#ffffff"
-            />
+            android:text="用户程序(12)"
+            android:textColor="#ffffff" />
 
         <ProgressBar
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:indeterminateDrawable="@drawable/progressbar_drawable"
-            />
+            android:indeterminateDrawable="@drawable/progressbar_drawable" />
     </FrameLayout>
 
 </LinearLayout>

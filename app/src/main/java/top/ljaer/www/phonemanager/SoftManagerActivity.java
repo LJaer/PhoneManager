@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import java.util.List;
 
 import top.ljaer.www.phonemanager.bean.AppInfo;
 import top.ljaer.www.phonemanager.engine.AppEngine;
+import top.ljaer.www.phonemanager.utils.AppUtil;
 import top.ljaer.www.phonemanager.utils.MyAsynTaks;
 
 /**
@@ -60,6 +62,8 @@ public class SoftManagerActivity extends Activity implements View.OnClickListene
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private TextView tv_softmanager_rom;
+    private TextView tv_softmanager_sd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,18 @@ public class SoftManagerActivity extends Activity implements View.OnClickListene
         lv_softmanager_applicaiton = (ListView) findViewById(R.id.lv_softmanager_applicaiton);
         loading = (ProgressBar) findViewById(R.id.loading);
         tv_softmanager_userorsystem = (TextView) findViewById(R.id.tv_softmanager_userorsystem);
+        tv_softmanager_rom = (TextView) findViewById(R.id.tv_softmanager_rom);
+        tv_softmanager_sd = (TextView) findViewById(R.id.tv_softmanager_sd);
+
+        //获取可用内存,获取都是kb
+        long availableSD = AppUtil.getAvailableSD();
+        long availableRom = AppUtil.getAvailableRom();
+        //数据转换
+        String sdsize = Formatter.formatFileSize(getApplicationContext(),availableSD);
+        String romsize = Formatter.formatFileSize(getApplicationContext(),availableRom);
+        //设置显示
+        tv_softmanager_sd.setText("SD卡可用:"+sdsize);
+        tv_softmanager_rom.setText("内存可用:"+romsize);
 
         //加载数据
         fillData();
