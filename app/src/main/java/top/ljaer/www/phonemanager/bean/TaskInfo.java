@@ -18,6 +18,8 @@ public class TaskInfo {
     private String packageName;
     //是否是用户程序
     private boolean isUser;
+    //checkbox是否被选中
+    private boolean isChecked = false;
 
     public String getName() {
         return name;
@@ -59,8 +61,17 @@ public class TaskInfo {
         isUser = user;
     }
 
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
     public TaskInfo() {
     }
+
 
     public TaskInfo(String name, Drawable icon, long ramSize, String packageName, boolean isUser) {
         this.name = name;
@@ -80,4 +91,6 @@ public class TaskInfo {
                 ", isUser=" + isUser +
                 '}';
     }
+
+
 }

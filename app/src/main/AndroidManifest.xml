@@ -50,6 +50,7 @@
         <activity android:name=".AddressActivity" />
         <activity android:name=".CallSmsSafeActivity"/>
         <activity android:name=".SoftManagerActivity"/>
+        <activity android:name=".TaskManagerActivity"/>
         <activity
             android:name=".DragViewActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
