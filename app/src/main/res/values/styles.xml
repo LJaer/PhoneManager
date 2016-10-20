@@ -4,11 +4,6 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!--去除标题栏-->
         <item name="windowNoTitle">true</item>
-
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="next">
@@ -33,6 +28,11 @@
         <item name="android:drawableLeft">@drawable/previous</item>
         <item name="android:padding">5dp</item>
         <item name="android:onClick">pre</item>
+    </style>
+
+    <style name="widget_text">
+        <item name="android:textSize">16.0dip</item>
+        <item name="android:textColor">@color/textColorPrimaryDark</item>
     </style>
 
 </resources>
