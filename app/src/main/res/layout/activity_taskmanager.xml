@@ -49,12 +49,9 @@
     <!-- FrameLayout:在布局文件中控件越往下,显示的时候越在上方 -->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ListView
-            android:id="@+id/lv_taskmanager_processes"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
 
         <!--<TextView
             android:id="@+id/tv_softmanager_userorsystem"
@@ -70,14 +67,42 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:indeterminateDrawable="@drawable/progressbar_drawable" />
+
+        <ListView
+            android:id="@+id/lv_taskmanager_processes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
     </FrameLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
 
+        <Button
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="全选"
+            android:onClick="all"
+            />
+
+        <Button
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="取消"
+            android:onClick="cancel"
+            />
+
+        <Button
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="清理"
+            android:onClick="clear"
+            />
 
     </LinearLayout>
 

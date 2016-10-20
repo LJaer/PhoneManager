@@ -1,6 +1,7 @@
 package top.ljaer.www.phonemanager;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +83,9 @@ public class TaskManagerActivity extends Activity {
                 if(taskInfo.isChecked()){
                     taskInfo.setChecked(false);
                 }else{
-                    taskInfo.setChecked(true);
+                    if (!taskInfo.getPackageName().equals(getPackageName())){
+                        taskInfo.setChecked(true);
+                    }
                 }
                 //4、更新界面
                 //myadapter.notifyDataSetChanged();
@@ -220,6 +224,12 @@ public class TaskManagerActivity extends Activity {
             }else{
                 viewHolder.cd_itemtaskmanager_ischecked.setChecked(false);
             }
+            //判断如果是我们的应用程序，就把checkbox隐藏，不是的话显示，在getview中有if必须有else
+            if(taskInfo.getPackageName().equals(getPackageName())){
+                viewHolder.cd_itemtaskmanager_ischecked.setVisibility(View.INVISIBLE);
+            }else{
+                viewHolder.cd_itemtaskmanager_ischecked.setVisibility(View.VISIBLE);
+            }
             return view;
         }
     }
@@ -228,5 +238,91 @@ public class TaskManagerActivity extends Activity {
         ImageView iv_itemtaskmanager_icon;
         TextView tv_itemtaskmanager_name, tv_itemtaskmanager_ram;
         CheckBox cd_itemtaskmanager_ischecked;
+    }
+
+    /**
+     * 全选
+     * @param v
+     */
+    public void all(View v){
+        //用户进程
+        for (int i=0;i<userappinfo.size();i++){
+            if (!userappinfo.get(i).getPackageName().equals(getPackageName())) {
+                userappinfo.get(i).setChecked(true);
+            }
+        }
+        //系统进程
+        for (int i=0;i<systemappinfo.size();i++){
+            systemappinfo.get(i).setChecked(true);
+        }
+        //更新界面
+        myadapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 取消
+     * @param v
+     */
+    public void cancel(View v){
+        //用户进程
+        for (int i=0;i<userappinfo.size();i++){
+            userappinfo.get(i).setChecked(false);
+        }
+        //系统进程
+        for (int i=0;i<systemappinfo.size();i++){
+            systemappinfo.get(i).setChecked(false);
+        }
+        //更新界面
+        myadapter.notifyDataSetChanged();
+    }
+
+    public void clear(View v){
+        //1、获取进程的管理者
+        ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        //保存杀死进程信息的集合
+        List<TaskInfo> deleteTaskInfos = new ArrayList<TaskInfo>();
+
+        //用户进程
+        for (int i=0; i<userappinfo.size();i++){
+            if(userappinfo.get(i).isChecked()){
+                //杀死进程
+                //packageName:进程的包名
+                //杀死后台进程
+                am.killBackgroundProcesses(userappinfo.get(i).getPackageName());
+                deleteTaskInfos.add(userappinfo.get(i));//将杀死的进程信息保存到集合中
+            }
+        }
+
+        //系统进程
+        for (int i=0; i<systemappinfo.size();i++){
+            if(systemappinfo.get(i).isChecked()){
+                //杀死进程
+                //packageName:进程的包名
+                //杀死后台进程
+                am.killBackgroundProcesses(systemappinfo.get(i).getPackageName());
+                deleteTaskInfos.add(systemappinfo.get(i));//将杀死的进程信息保存到集合中
+            }
+        }
+
+        long memory = 0;
+        // 遍历deleteTaskInfos，分别从userappinfo和systemappinfo中删除deleteInfos中的数据
+        for (TaskInfo taskInfo: deleteTaskInfos){
+            if (taskInfo.isUser()){
+                userappinfo.remove(taskInfo);
+            }else {
+                systemappinfo.remove(taskInfo);
+            }
+            memory+=taskInfo.getRamSize();
+        }
+        //数据转化
+        String deleteSize = Formatter.formatFileSize(getApplicationContext(),memory);
+        Toast.makeText(getApplicationContext(),"共清理"+deleteTaskInfos.size()+"个进程，释放"+deleteSize+"内存空间",Toast.LENGTH_SHORT).show();
+
+        //为下次清理进程做准备
+        deleteTaskInfos.clear();
+        deleteTaskInfos=null;
+
+        //更新界面
+        myadapter.notifyDataSetChanged();
     }
 }
