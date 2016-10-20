@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId "top.ljaer.www.phonemanager"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 14
         multiDexEnabled true
     }

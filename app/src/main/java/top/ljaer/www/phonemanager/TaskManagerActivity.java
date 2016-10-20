@@ -26,6 +26,7 @@ import top.ljaer.www.phonemanager.bean.TaskInfo;
 import top.ljaer.www.phonemanager.engine.AppEngine;
 import top.ljaer.www.phonemanager.engine.TaskEngine;
 import top.ljaer.www.phonemanager.utils.MyAsynTaks;
+import top.ljaer.www.phonemanager.utils.TaskUtil;
 
 import static top.ljaer.www.phonemanager.R.id.lv_softmanager_applicaiton;
 
@@ -45,6 +46,11 @@ public class TaskManagerActivity extends Activity {
     private List<TaskInfo> systemappinfo;
     private MyAdapter myadapter;
     private TaskInfo taskInfo;
+    //是否显示系统进程的标示
+    private boolean isshowSystem = true;
+    private TextView tv_taskmanager_processes;
+    private TextView tv_taskmanager_freeandtotalram;
+    private int processCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +58,33 @@ public class TaskManagerActivity extends Activity {
         setContentView(R.layout.activity_taskmanager);
         lv_taskmanager_processes = (ListView)findViewById(R.id.lv_taskmanager_processes);
         loading = (ProgressBar) findViewById(R.id.loading);
+        tv_taskmanager_processes = (TextView) findViewById(R.id.tv_taskmanager_processes);
+        tv_taskmanager_freeandtotalram = (TextView) findViewById(R.id.tv_taskmanager_freeandtotalram);
+
+        //设置显示数据
+        //获取相应的数据
+        //获取运行的进程个数
+        processCount = TaskUtil.getProcessCount(getApplicationContext());
+        tv_taskmanager_processes.setText("运行中进程:\n" + processCount + "个");
+        //获取剩余,总内存
+        long availableRam = TaskUtil.getAvailableRam(getApplicationContext());
+        //数据转化
+        String availaRam = Formatter.formatFileSize(getApplicationContext(),availableRam);
+        //获取总内存
+        // 根据不同的sdk版去调用不同的方法
+        // 1.获取当前的sdk版本
+        int sdk =  android.os.Build.VERSION.SDK_INT;
+        long totalRam;
+        if (sdk>=16){
+            totalRam = TaskUtil.getTotalRam(getApplicationContext());
+        }else{
+            totalRam = TaskUtil.getTotalRam();
+        }
+        //数据转换
+        String totRam = Formatter.formatFileSize(getApplicationContext(),totalRam);
+        tv_taskmanager_freeandtotalram.setText("剩余/总内存:\n" + availaRam + "/"
+                + totRam);
+
         //加载数据
         fillData();
         listviewItemClick();
@@ -141,7 +174,8 @@ public class TaskManagerActivity extends Activity {
         @Override
         public int getCount() {
             //list.size()=userappinfo.size()+systemappinfo.size()
-            return userappinfo.size() + systemappinfo.size() + 2;//+2是两个条目
+            //return userappinfo.size() + systemappinfo.size() + 2;//+2是两个条目
+            return isshowSystem==true ? userappinfo.size() + 1 + systemappinfo.size() + 1 : userappinfo.size() + 1;
         }
 
         @Override
@@ -318,10 +352,49 @@ public class TaskManagerActivity extends Activity {
         String deleteSize = Formatter.formatFileSize(getApplicationContext(),memory);
         Toast.makeText(getApplicationContext(),"共清理"+deleteTaskInfos.size()+"个进程，释放"+deleteSize+"内存空间",Toast.LENGTH_SHORT).show();
 
+        //更改运行中的进程个数以及剩余总内存
+        processCount = processCount-deleteTaskInfos.size();
+        tv_taskmanager_processes.setText("运行中进程:\n" + processCount + "个");
+
+        //更改剩余总内存，重新获取剩余总内存
+        // 获取剩余,总内存
+        // 更改剩余总内存,重新获取剩余总内存
+        // 获取剩余,总内存'
+        long availableRam = TaskUtil.getAvailableRam(getApplicationContext());
+        // 数据转化
+        String availaRam = Formatter.formatFileSize(getApplicationContext(),
+                availableRam);
+        // 获取总内存
+        // 根据不同的sdk版去调用不同的方法
+        // 1.获取当前的sdk版本
+        int sdk = android.os.Build.VERSION.SDK_INT;
+        long totalRam;
+        if (sdk >= 16) {
+            totalRam = TaskUtil.getTotalRam(getApplicationContext());
+        } else {
+            totalRam = TaskUtil.getTotalRam();
+        }
+        // 数据转化
+        String totRam = Formatter.formatFileSize(getApplicationContext(),
+                totalRam);
+        tv_taskmanager_freeandtotalram.setText("剩余/总内存:\n" + availaRam + "/"
+                + totRam);
+
         //为下次清理进程做准备
         deleteTaskInfos.clear();
         deleteTaskInfos=null;
 
+        //更新界面
+        myadapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 设置
+     * @param v
+     */
+    public void setting(View v){
+        //true 改为false  false改为true
+        isshowSystem = !isshowSystem;
         //更新界面
         myadapter.notifyDataSetChanged();
     }
