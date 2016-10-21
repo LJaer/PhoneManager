@@ -5,9 +5,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,6 +19,7 @@ import android.os.SystemClock;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.BitmapFactory;
 
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -230,6 +233,34 @@ public class SplashActivity extends Activity {
         //开启监听电话状态的服务
         /*Intent intent = new Intent(this, AddressService.class);
         startService(intent);*/
+        shortcut();
+    }
+
+    /**
+     * 创建快捷方式
+     */
+    private void shortcut() {
+        if(sp.getBoolean("firstshortcut",true)){
+            //给桌面发送一个广播
+            Intent intent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+            //设置属性
+            //设置快捷方式名称
+            intent.putExtra(Intent.EXTRA_SHORTCUT_NAME,"手机卫士75");
+            //设置快捷方式的图标
+            Bitmap value = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);
+            intent.putExtra(Intent.EXTRA_SHORTCUT_ICON,value);
+            //设置快捷方式执行的操作
+            Intent intent2 = new Intent();
+            intent2.setAction("top.ljaer.www.phonemanager.home");
+            intent2.addCategory("android.intent.category.DEFAULT");
+            intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT,intent2);
+            sendBroadcast(intent);
+
+            //保存已经创建快捷方式的状态
+            Editor edit =  sp.edit();
+            edit.putBoolean("firstshortcut",false);
+            edit.commit();
+        }
     }
 
     /**

@@ -21,6 +21,9 @@ public class MyWidget extends AppWidgetProvider {
                          int[] appWidgetIds) {
         System.out.println("onUpdate");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
+        //开启更新服务
+        Intent intent = new Intent(context,WidgetService.class);
+        context.startService(intent);
     }
 
     @Override

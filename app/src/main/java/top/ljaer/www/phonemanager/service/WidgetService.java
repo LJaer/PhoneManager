@@ -34,6 +34,8 @@ public class WidgetService extends Service {
     private AppWidgetManager appWidgetManager;
     private WidgetReceiver widgetReceiver;
     private Timer timer;
+    private ScreenOffReceiver screenOffReceiver;
+    private ScreenOnReceiver screenOnReceiver;
 
     @Nullable
     @Override
@@ -49,8 +51,42 @@ public class WidgetService extends Service {
         public void onReceive(Context context, Intent intent) {
             //清理进程
             killProcess();
+            //停止更新
+            stopUpdates();
         }
+    }
 
+    /**
+     * 解锁的广播接受者
+     */
+    private class ScreenOnReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("屏幕解锁了...");
+            updateWidgets();
+        }
+    }
+
+    /**
+     * 锁屏的广播接收者
+     */
+    private class ScreenOffReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            System.out.println("锁屏了...");
+            //清理进程
+            killProcess();
+        }
+    }
+
+    /**
+     * 停止更新widget
+     */
+    private void stopUpdates() {
+        if (timer!=null){
+            timer.cancel();
+            timer=null;
+        }
     }
 
     /**
@@ -81,6 +117,20 @@ public class WidgetService extends Service {
         //3、注册广播接收者
         registerReceiver(widgetReceiver, intentFilter);
 
+        //注册锁屏的广播接收者
+        screenOffReceiver = new ScreenOffReceiver();
+        //设置广播接收事件
+        IntentFilter screenOffIntentFilter = new IntentFilter();
+        screenOffIntentFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(screenOffReceiver,screenOffIntentFilter);
+
+        //注册解锁的广播接收者
+        screenOnReceiver = new ScreenOnReceiver();
+        //设置广播接收事件
+        IntentFilter screenOnIntentFilter = new IntentFilter();
+        screenOffIntentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        registerReceiver(screenOnReceiver,screenOnIntentFilter);
+
         //widgets的管理者
         appWidgetManager = AppWidgetManager.getInstance(this);
         //更新操作
@@ -91,15 +141,20 @@ public class WidgetService extends Service {
     public void onDestroy() {
         super.onDestroy();
         //停止更新widget
-        if (timer!=null){
-            timer.cancel();
-            timer=null;
-        }
+        stopUpdates();
 
         //注销清理进程的广播接收者
         if (widgetReceiver != null) {
             unregisterReceiver(widgetReceiver);
             widgetReceiver = null;
+        }
+        if (screenOffReceiver != null) {
+            unregisterReceiver(screenOffReceiver);
+            screenOffReceiver = null;
+        }
+        if (screenOnReceiver != null) {
+            unregisterReceiver(screenOnReceiver);
+            screenOnReceiver = null;
         }
     }
 
