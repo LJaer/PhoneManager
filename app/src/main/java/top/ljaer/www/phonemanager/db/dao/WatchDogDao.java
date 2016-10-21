@@ -1,6 +1,8 @@
 package top.ljaer.www.phonemanager.db.dao;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import top.ljaer.www.phonemanager.db.WatchDogOpenHelper;
 
@@ -24,6 +26,9 @@ public class WatchDogDao {
      * @param packagename
      */
     public void addLockApp(String packagename){
-
+        //synchronized (b){
+            //1、获取数据库
+            SQLiteDatabase database = watchDogOpenHelper.getWritableDatabase();
+        //}
     }
 }
