@@ -44,10 +44,7 @@ public class WatchDogService extends Service {
                         String packageName = baseactivity.getPackageName();
                         System.out.println(packageName);
                         if (packageName.equals("com.android.mms")){
-                            Intent intent = new Intent(WatchDogService.this,MainActivity.class);
-                            //因为activity保存在任务栈中,而服务,广播没有保存在任务栈中的,所以在服务,广播中跳转activity必须给activity设置任务栈
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+
                         }
                     }
                     System.out.println("----------------------");

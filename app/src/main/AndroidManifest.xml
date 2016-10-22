@@ -24,6 +24,8 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <application
         android:allowBackup="true"
@@ -39,7 +41,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity"></activity>
+        <activity android:name=".HomeActivity">
+            <intent-filter>
+                <action android:name="top.ljaer.www.phonemanager.home"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".SettingActivity"></activity>
         <activity android:name=".LostFindActivity" />
         <activity android:name=".SetUp1Activity" />
@@ -97,6 +104,7 @@
         <service android:name=".service.GPSService" />
         <service android:name=".service.AddressService" />
         <service android:name=".service.WidgetService"/>
+        <service android:name=".service.WatchDogService"/>
         
         <meta-data
             android:name="com.google.android.gms.version"

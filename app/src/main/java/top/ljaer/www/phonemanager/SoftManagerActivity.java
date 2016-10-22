@@ -38,6 +38,7 @@ import java.util.List;
 import top.ljaer.www.phonemanager.bean.AppInfo;
 import top.ljaer.www.phonemanager.engine.AppEngine;
 import top.ljaer.www.phonemanager.utils.AppUtil;
+import top.ljaer.www.phonemanager.utils.DensityUtil;
 import top.ljaer.www.phonemanager.utils.MyAsynTaks;
 
 /**
@@ -148,7 +149,8 @@ public class SoftManagerActivity extends Activity implements View.OnClickListene
                 int y = location[1];
                 //parent:要挂载在哪个控件上
                 //gravity,x,y:控制popupWindow显示的位置
-                popupWindow.showAtLocation(parent, Gravity.LEFT | Gravity.TOP, x + 50, y);
+                //50 px dp dp->px
+                popupWindow.showAtLocation(parent, Gravity.LEFT | Gravity.TOP, x + DensityUtil.dip2qx(getApplicationContext(),50), y);
                 //6、设置动画
                 //缩放动画
                 //前四个:控制控件由没有变到有    动画0:没有  1:整个控件

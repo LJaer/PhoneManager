@@ -36,9 +36,6 @@ public class MyWidget extends AppWidgetProvider {
     public void onEnabled(Context context) {
         System.out.println("onEnabled");
         super.onEnabled(context);
-        //开启服务
-        Intent intent = new Intent(context, WidgetService.class);
-        context.startService(intent);
     }
 
     @Override
