@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import top.ljaer.www.phonemanager.bean.AppInfo;
+import top.ljaer.www.phonemanager.db.dao.WatchDogDao;
 import top.ljaer.www.phonemanager.engine.AppEngine;
 import top.ljaer.www.phonemanager.utils.AppUtil;
 import top.ljaer.www.phonemanager.utils.DensityUtil;
@@ -65,17 +66,21 @@ public class SoftManagerActivity extends Activity implements View.OnClickListene
     private GoogleApiClient client;
     private TextView tv_softmanager_rom;
     private TextView tv_softmanager_sd;
+    private WatchDogDao watchDogDao;
+    private ImageView iv_itemsoftmanager_islock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_softmanager);
+        watchDogDao = new WatchDogDao(getApplicationContext());
         //初始化控件
         lv_softmanager_applicaiton = (ListView) findViewById(R.id.lv_softmanager_applicaiton);
         loading = (ProgressBar) findViewById(R.id.loading);
         tv_softmanager_userorsystem = (TextView) findViewById(R.id.tv_softmanager_userorsystem);
         tv_softmanager_rom = (TextView) findViewById(R.id.tv_softmanager_rom);
         tv_softmanager_sd = (TextView) findViewById(R.id.tv_softmanager_sd);
+        iv_itemsoftmanager_islock = (ImageView) findViewById(R.id.iv_itemsoftmanager_islock);
 
         //获取可用内存,获取都是kb
         long availableSD = AppUtil.getAvailableSD();
@@ -372,12 +377,20 @@ public class SoftManagerActivity extends Activity implements View.OnClickListene
             }
             viewHolder.tv_itemsoftmanager_version.setText(appInfo.getVersionName());
 
+            //判断用户是加锁还是解锁
+            if(watchDogDao.queryLockApp(appInfo.getPackageName())){
+                //加锁
+                viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.lock);
+            }else{
+                //解锁
+                viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.unlock);
+            }
             return view;
         }
     }
 
     static class ViewHolder {
-        ImageView iv_itemsoftmanager_icon;
+        ImageView iv_itemsoftmanager_icon,iv_itemsoftmanager_islock;
         TextView tv_itemsoftmanager_name, tv_itemsoftmanager_issd, tv_itemsoftmanager_version;
     }
 
