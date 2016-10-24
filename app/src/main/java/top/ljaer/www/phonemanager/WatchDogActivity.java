@@ -15,11 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 /**
  * Created by jaer on 2016/10/24.
  */
@@ -29,15 +24,11 @@ public class WatchDogActivity extends Activity {
     private TextView tv_watchdog_name;
     private String packagename;
     private EditText ed_watchdog_password;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_watchdog);
         iv_watchdog_icon = (ImageView) findViewById(R.id.iv_watchdog_icon);
         tv_watchdog_name = (TextView) findViewById(R.id.tv_watchdog_name);
@@ -63,12 +54,13 @@ public class WatchDogActivity extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            System.out.println("返回键");
             /**
              * Starting: Intent {
              act=android.intent.action.MAIN
              cat=[android.intent.category.HOME
-             ] cmp=com.android.launcher/com.android.launcher2.Launcher } from pid 208
-             */
+             ] cmp=com.android.launcher/com.android.launcher2.Launcher } from pid 208*/
+
             //跳转到主界面
             Intent intent = new Intent();
             intent.setAction("android.intent.action.MAIN");
@@ -78,6 +70,8 @@ public class WatchDogActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
 
     public void lock(View v) {
         //解锁
@@ -97,48 +91,7 @@ public class WatchDogActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-    }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("WatchDog Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
-    }
 }

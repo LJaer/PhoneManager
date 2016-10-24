@@ -28,9 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,11 +57,7 @@ public class SoftManagerActivity extends Activity implements View.OnClickListene
     private AppInfo appInfo;
     private PopupWindow popupWindow;
     private MyAdapter myadapter;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+
     private TextView tv_softmanager_rom;
     private TextView tv_softmanager_sd;
     private WatchDogDao watchDogDao;
@@ -80,7 +74,6 @@ public class SoftManagerActivity extends Activity implements View.OnClickListene
         tv_softmanager_userorsystem = (TextView) findViewById(R.id.tv_softmanager_userorsystem);
         tv_softmanager_rom = (TextView) findViewById(R.id.tv_softmanager_rom);
         tv_softmanager_sd = (TextView) findViewById(R.id.tv_softmanager_sd);
-        iv_itemsoftmanager_islock = (ImageView) findViewById(R.id.iv_itemsoftmanager_islock);
 
         //获取可用内存,获取都是kb
         long availableSD = AppUtil.getAvailableSD();
@@ -323,27 +316,6 @@ public class SoftManagerActivity extends Activity implements View.OnClickListene
                 .build();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
-    }
-
-
     private class MyAdapter extends BaseAdapter {
 
         @Override
@@ -394,6 +366,7 @@ public class SoftManagerActivity extends Activity implements View.OnClickListene
                 viewHolder.tv_itemsoftmanager_name = (TextView) view.findViewById(R.id.tv_itemsoftmanager_name);
                 viewHolder.tv_itemsoftmanager_issd = (TextView) view.findViewById(R.id.tv_itemsoftmanager_issd);
                 viewHolder.tv_itemsoftmanager_version = (TextView) view.findViewById(R.id.tv_itemsoftmanager_version);
+                viewHolder.iv_itemsoftmanager_islock = (ImageView) view.findViewById(R.id.iv_itemsoftmanager_islock);
                 //将viewholder和view对象绑定
                 view.setTag(viewHolder);
             }

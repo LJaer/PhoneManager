@@ -71,5 +71,13 @@
             itheima:des_on="打开黑名单拦截"
             itheima:title="黑名单拦截"></top.ljaer.www.phonemanager.ui.SettingView>
 
+        <top.ljaer.www.phonemanager.ui.SettingView
+            android:id="@+id/sv_setting_lock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            itheima:des_off="关闭软件锁"
+            itheima:des_on="打开软件锁"
+            itheima:title="软件锁"></top.ljaer.www.phonemanager.ui.SettingView>
+
     </LinearLayout>
 </ScrollView>

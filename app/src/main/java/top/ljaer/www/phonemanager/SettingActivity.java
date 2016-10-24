@@ -10,6 +10,7 @@ import android.view.View;
 
 import top.ljaer.www.phonemanager.service.AddressService;
 import top.ljaer.www.phonemanager.service.BlackNumService;
+import top.ljaer.www.phonemanager.service.WatchDogService;
 import top.ljaer.www.phonemanager.ui.SettingClickView;
 import top.ljaer.www.phonemanager.ui.SettingView;
 import top.ljaer.www.phonemanager.utils.AddressUtils;
@@ -24,6 +25,7 @@ public class SettingActivity extends Activity {
     private SettingClickView scv_setting_changebg;
     private SettingClickView scv_setting_location;
     private SettingView sv_setting_blacknum;
+    private SettingView sv_setting_lock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class SettingActivity extends Activity {
         scv_setting_changebg = (SettingClickView) findViewById(R.id.scv_setting_changebg);
         scv_setting_location = (SettingClickView) findViewById(R.id.scv_setting_location);
         sv_setting_blacknum = (SettingView) findViewById(R.id.sv_setting_blacknum);
+        sv_setting_lock = (SettingView) findViewById(R.id.sv_setting_lock);
 
         update();
         changedbg();
@@ -123,8 +126,40 @@ public class SettingActivity extends Activity {
         super.onStart();
         address();
         blackNum();
+        lock();
     }
 
+    //软件锁
+    private void lock() {
+        //回写操作
+        //动态的获取服务是否开启
+        if(AddressUtils.isRunningService("top.ljaer.www.phonemanager.service.WatchDogService",getApplicationContext())){
+            //开启服务
+            sv_setting_lock.setChecked(true);
+        }else{
+            //关闭服务
+            sv_setting_lock.setChecked(false);
+        }
+
+        sv_setting_lock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingActivity.this,WatchDogService.class);
+                //根据checkbox状态设置描述信息状态
+                //isChecked:代表之前的状态
+                if(sv_setting_lock.isChecked()){
+                    //关闭提示更新
+                    stopService(intent);
+                    //更新checkbox状态
+                    sv_setting_lock.setChecked(false);
+                }else {
+                    //打开提示更新
+                    startService(intent);
+                    sv_setting_lock.setChecked(true);
+                }
+            }
+        });
+    }
 
 
     //activity不可见的时候调用
