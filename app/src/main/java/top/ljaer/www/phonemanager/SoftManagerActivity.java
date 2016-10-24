@@ -96,9 +96,47 @@ public class SoftManagerActivity extends Activity implements View.OnClickListene
         fillData();
         listviewOnScroll();
         listviewItemClick();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        listviewItemLongClick();
+    }
+    /**
+     * 长按点击事件
+     */
+    private void listviewItemLongClick() {
+        lv_softmanager_applicaiton.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("长按点击事件");
+                //true if the callback consumed the long click, false otherwise
+                //true:表示执行  false:拦截
+                //加锁解锁的操作
+                //屏蔽用户和系统程序(..个)不能加锁解锁操作
+                if (position == 0 || position == userappinfo.size()+1) {
+                    return true;
+                }
+                //获取数据
+                if (position <= userappinfo.size()) {
+                    //用户程序
+                    appInfo = userappinfo.get(position-1);
+                }else{
+                    //系统程序
+                    appInfo = systemappinfo.get(position - userappinfo.size() - 2);
+                }
+                //加锁解锁
+                ViewHolder viewHolder = (ViewHolder) view.getTag();
+                //判断应用有没有加锁，有的解锁，没有的加锁
+                if(watchDogDao.queryLockApp(appInfo.getPackageName())){
+                    //解锁操作
+                    watchDogDao.deleteLockApp(appInfo.getPackageName());
+                    viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.unlock);
+                }else{
+                    //加锁操作
+                    watchDogDao.addLockApp(appInfo.getPackageName());
+                    viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.lock);
+                }
+                //myadapter.notifyDataSetChanged();
+                return true;
+            }
+        });
     }
 
     /**
