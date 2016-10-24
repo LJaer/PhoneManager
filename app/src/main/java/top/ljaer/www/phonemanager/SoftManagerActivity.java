@@ -130,8 +130,12 @@ public class SoftManagerActivity extends Activity implements View.OnClickListene
                     viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.unlock);
                 }else{
                     //加锁操作
-                    watchDogDao.addLockApp(appInfo.getPackageName());
-                    viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.lock);
+                    if(!appInfo.getPackageName().equals(getPackageName())){
+                        watchDogDao.addLockApp(appInfo.getPackageName());
+                        viewHolder.iv_itemsoftmanager_islock.setImageResource(R.drawable.lock);
+                    }else{
+                        Toast.makeText(getApplicationContext(), "当前的应用程序不能加锁", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 //myadapter.notifyDataSetChanged();
                 return true;
