@@ -22,4 +22,21 @@ public class AToolsActivity extends Activity {
         Intent intent = new Intent(this,AddressActivity.class);
         startActivity(intent);
     }
+
+    /**
+     * 备份短信
+     * @param v
+     */
+    public void backupsms(View v){
+        //读取短信
+        //备份短信
+    }
+
+    /**
+     * 还原短信
+     * @param v
+     */
+    public void restoresms(View v){
+
+    }
 }

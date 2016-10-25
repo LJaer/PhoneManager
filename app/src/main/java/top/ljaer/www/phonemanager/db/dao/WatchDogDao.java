@@ -1,10 +1,13 @@
 package top.ljaer.www.phonemanager.db.dao;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +23,12 @@ import top.ljaer.www.phonemanager.db.WatchDogOpenHelper;
 public class WatchDogDao {
     private WatchDogOpenHelper watchDogOpenHelper;
     private byte[] b = new byte[1024];
+    private Context context;
 
     //在构造函数中获取WatchDogOpenHelper
     public WatchDogDao(Context context) {
         watchDogOpenHelper = new WatchDogOpenHelper(context);
+        this.context = context;
     }
 
     //增删改查
@@ -43,6 +48,14 @@ public class WatchDogDao {
         ContentValues values = new ContentValues();
         values.put("packagename", packagename);
         database.insert(WatchDogOpenHelper.DB_NAME, null, values);
+
+        //通知内容观察者数据库变化了
+        ContentResolver contentResolver = context.getContentResolver();
+        //因为是我们自己的数据发生变化了,所以我们要自定义一个uri进行操作
+        Uri uri = Uri.parse("content://top.ljaer.www.phonemanager.lock.changed");
+        //通知内容观察者数据发生变化
+        contentResolver.notifyChange(uri,null);
+
         //3、关闭数据库
         database.close();
         //}
@@ -86,6 +99,14 @@ public class WatchDogDao {
         //whereClause:查询的条件
         //whereArgs:查询条件的参数
         database.delete(BlackNumOpenHelper.DB_NAME,"packagename=?",new String[]{packagename});
+
+        //通知内容观察者数据库变化了
+        ContentResolver contentResolver = context.getContentResolver();
+        //因为是我们自己的数据发生变化了,所以我们要自定义一个uri进行操作
+        Uri uri = Uri.parse("content://top.ljaer.www.phonemanager.lock.changed");
+        //通知内容观察者数据发生变化
+        contentResolver.notifyChange(uri,null);
+
         //3、关闭数据库
         database.close();
     }

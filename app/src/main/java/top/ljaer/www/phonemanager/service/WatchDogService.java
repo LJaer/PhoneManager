@@ -108,21 +108,16 @@ public class WatchDogService extends Service {
                         //判断list集合中是否包含包名
                         boolean b = list.contains(packageName);
                         //通过查询数据库,如果数据库中有,弹出解锁界面,没有不作处理
-                        /*if (b){
-                            //if (packageName.equals(unlockcurrentPackagename)){
+                        if (b){
+                            if (!packageName.equals(unlockcurrentPackagename)){
                                 //弹出解锁界面
                                 Intent intent = new Intent(WatchDogService.this,WatchDogActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("packageName",packageName);
                                 startActivity(intent);
-                            //}
-                        }*/
-
-                        if (watchDogDao.queryLockApp(packageName)) {
-                            //弹出解锁界面
-                            Intent intent = new Intent(WatchDogService.this,WatchDogActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+                            }
                         }
+
                     }
                     System.out.println("----------------------");
                     SystemClock.sleep(300);

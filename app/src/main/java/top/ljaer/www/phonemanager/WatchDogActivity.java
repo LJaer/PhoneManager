@@ -52,10 +52,21 @@ public class WatchDogActivity extends Activity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             System.out.println("返回键");
-            /**
+           /* *
              * Starting: Intent {
              act=android.intent.action.MAIN
              cat=[android.intent.category.HOME
@@ -70,8 +81,6 @@ public class WatchDogActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
-
 
     public void lock(View v) {
         //解锁
