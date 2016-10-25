@@ -12,5 +12,4 @@ public class SMSTest extends AndroidTestCase {
     public void testsms(){
         SMSEngine.getAllSMS(getContext());
     }
-
 }
