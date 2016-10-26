@@ -61,6 +61,7 @@
         <activity android:name=".CallSmsSafeActivity" />
         <activity android:name=".SoftManagerActivity" />
         <activity android:name=".TaskManagerActivity" />
+        <activity android:name=".TrafficActivity"/>
         <activity android:name=".WatchDogActivity"
             android:launchMode="singleInstance"
             android:excludeFromRecents="true"
