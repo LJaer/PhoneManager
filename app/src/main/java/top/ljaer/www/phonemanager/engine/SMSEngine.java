@@ -17,10 +17,19 @@ import java.io.FileOutputStream;
 
 public class SMSEngine {
 
+    //1.创建刷子
+    public interface ShowProgress{
+        //设置最大进度
+        public void setMax(int max);
+        //设置当前进度
+        public void setProgress(int progerss);
+    }
+
+    //2.媳妇儿给你刷子
     /**
      * 获取短信
      */
-    public static void getAllSMS(Context context) {
+    public static void getAllSMS(Context context,ShowProgress showProgress) {
         //1.获取短信
         //1.1获取内容解析者
         ContentResolver resolver = context.getContentResolver();
@@ -34,6 +43,12 @@ public class SMSEngine {
         //sortOrder : 排序
         Cursor cursor = resolver.query(uri, new String[]{"address","date","type","body"}, null, null, null);
 
+        //设置最大进度
+        int count = cursor.getCount();//获取短信的个数
+        showProgress.setMax(count);
+
+        //设置当前进度
+        int progress = 0;
 
         //2.备份短信
         //2.1获取xml序列器
@@ -77,6 +92,9 @@ public class SMSEngine {
                 xmlSerializer.endTag(null, "sms");
                 System.out.println("address:"+address+"   date:"+date+"  type:"+type+"  body:"+body);
 
+                //设置当前进度
+                progress++;
+                showProgress.setProgress(progress);
             }
             xmlSerializer.endTag(null, "smss");
             xmlSerializer.endDocument();
