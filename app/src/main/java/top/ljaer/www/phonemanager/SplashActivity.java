@@ -229,7 +229,8 @@ public class SplashActivity extends Activity {
             //SystemClock.sleep(2000);
             //enterHome();
         }
-        copyDb();
+        copyDb("address.db");
+        copyDb("antivirus.db");
         //开启监听电话状态的服务
         /*Intent intent = new Intent(this, AddressService.class);
         startService(intent);*/
@@ -266,8 +267,8 @@ public class SplashActivity extends Activity {
     /**
      * 拷贝数据库
      */
-    private void copyDb() {
-        File file = new File(getFilesDir(), "address.db");
+    private void copyDb(String dbname) {
+        File file = new File(getFilesDir(), dbname);
         //判断文件是否存在
         if (!file.exists()) {
             //从assets目录中将数据库读取出来
@@ -277,7 +278,7 @@ public class SplashActivity extends Activity {
             FileOutputStream out = null;
             try {
                 //2、读取数据库
-                in = am.open("address.db");
+                in = am.open(dbname);
                 //写入流
                 //getCacheDir:获取缓存的路径
                 //getFilesDir:获取文件的路径
