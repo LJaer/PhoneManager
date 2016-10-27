@@ -3,8 +3,10 @@ package top.ljaer.www.phonemanager.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.IPackageStatsObserver;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageStats;
 import android.content.pm.Signature;
 import android.graphics.Color;
 import android.net.Uri;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,6 +127,21 @@ public class CacheFragment extends Fragment {
             }
         }.start();
     }
+
+    //获取缓存大小
+    IPackageStatsObserver.Stub mStatsObserver = new IPackageStatsObserver.Stub() {
+        public void onGetStatsCompleted(PackageStats stats, boolean succeeded) {
+            long cachesize = stats.cacheSize;//缓存大小
+            long codesize = stats.codeSize;//应用程序的大小
+            long datasize = stats.dataSize;//数据大小
+
+            String cache = Formatter.formatFileSize(getActivity(), cachesize);
+            String code = Formatter.formatFileSize(getActivity(), codesize);
+            String data = Formatter.formatFileSize(getActivity(), datasize);
+
+            System.out.println(stats.packageName+"cachesize:"+cache +" codesize:"+code+" datasize:"+data);
+        }
+    };
 
     class CachInfo{
         private String packageName;
