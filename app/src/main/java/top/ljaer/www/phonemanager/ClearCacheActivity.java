@@ -13,7 +13,7 @@ import top.ljaer.www.phonemanager.fragment.SDFragment;
 /**
  * Created by LJaer on 16/10/26.
  */
-
+//如果要对fragment进行管理操作,activity必须继承fragmentActivity
 public class ClearCacheActivity extends FragmentActivity {
     private CacheFragment cacheFragment;
     private SDFragment sdFragment;

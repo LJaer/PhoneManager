@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -30,7 +32,6 @@
             android:progressDrawable="@drawable/progressbar_antivirus_bg"
             />
     </RelativeLayout>
-
     <Button
         android:id="@+id/btn_cachefragment_clear"
         android:layout_width="match_parent"

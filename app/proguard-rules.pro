@@ -15,4 +15,11 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+buildTypes {
+  release {
+    signingConfig signingConfigs.release
+    minifyEnabled true
+    proguardFiles getDefaultProguardFile(‘proguard-android.txt‘), ‘proguard-rules.pro‘
+  }
+}
 
